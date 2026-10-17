@@ -1,0 +1,1073 @@
+/* Clean Light-Theme Stylesheet for Swipe Brick Breaker */
+
+:root {
+    /* Fonts */
+    --font-primary: 'Inter', -apple-system, sans-serif;
+    --font-display: 'Outfit', sans-serif;
+    --font-digital: 'Orbitron', monospace;
+
+    /* Styling Variables: Flat Light Style */
+    --bg-gradient: linear-gradient(135deg, #f0f3f7 0%, #e4ebf2 100%);
+    --panel-bg: #ffffff;
+    --panel-border: #e2e8f0;
+    --panel-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    
+    --text-color: #2c3e50;
+    --text-muted: #7f8c8d;
+    
+    --primary-color: #00d7ff; /* Clean Blue/Cyan from screenshot */
+    --primary-glow: rgba(0, 215, 255, 0.15);
+    --secondary-color: #f18357; /* Pastel Orange from screenshot */
+    --secondary-glow: rgba(241, 131, 87, 0.15);
+    
+    --canvas-bg: #ffffff;
+    --canvas-border: #e2e8f0;
+    --canvas-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    
+    /* Coin System colors */
+    --coin-color: #f1c40f;
+    --coin-stroke: #f39c12;
+    --coin-text: #7f8c8d;
+    --coin-bg: rgba(241, 196, 15, 0.1);
+    
+    /* Gacha Rarity Colors */
+    --rarity-common: #95a5a6;
+    --rarity-rare: #2ecc71;
+    --rarity-epic: #9b59b6;
+    --rarity-legendary: #e67e22;
+    
+    --transition-speed: 0.25s;
+}
+
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body {
+    font-family: var(--font-primary);
+    background: var(--bg-gradient);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 10px;
+}
+
+/* Base Utilities */
+.digital {
+    font-family: var(--font-digital);
+}
+
+.highlight-gold {
+    color: var(--coin-stroke) !important;
+}
+
+.highlight-green {
+    color: #27ae60 !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Main Layout Wrapper */
+.game-container {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative; /* Added for buff tracker positioning */
+}
+
+/* Flat Header Panel */
+.game-header {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: var(--panel-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text-color);
+}
+
+.header-sub {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--panel-border);
+    padding-top: 8px;
+}
+
+/* Coin Display Badge */
+.coin-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--coin-bg);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(243, 156, 18, 0.2);
+}
+
+.coin-icon {
+    animation: coinSpin 4s infinite linear;
+}
+
+.coin-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--coin-stroke);
+}
+
+/* Shop Gacha Buttons Container */
+.shop-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+/* Shop Open Main Button in Header */
+.btn-shop-main {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-weight: 800;
+    color: #ffffff;
+    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
+    box-shadow: 0 3px 8px rgba(243, 156, 18, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-shop-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(243, 156, 18, 0.45);
+}
+
+.btn-shop-main:active {
+    transform: translateY(0);
+}
+
+.btn-shop-icon {
+    font-size: 14px;
+}
+
+.btn-shop-text {
+    font-size: 13px;
+}
+
+/* Settings Open Main Button in Header */
+.btn-settings-main {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-weight: 800;
+    color: #ffffff;
+    background: linear-gradient(135deg, #475569 0%, #334155 100%);
+    box-shadow: 0 3px 8px rgba(71, 85, 105, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-settings-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(71, 85, 105, 0.45);
+}
+
+.btn-settings-main:active {
+    transform: translateY(0);
+}
+
+.btn-settings-icon {
+    font-size: 14px;
+}
+
+.btn-settings-text {
+    font-size: 13px;
+}
+
+/* Inventory List */
+.inventory-bar {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inventory-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.inventory-list {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.inventory-list::-webkit-scrollbar {
+    display: none;
+}
+
+.inv-item {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    color: var(--text-color);
+}
+
+/* Color codes for inventories (light version) */
+.inv-item.basic { border-color: #cbd5e1; background: #fff; }
+.inv-item.steel { border-color: #94a3b8; color: #475569; background: #f1f5f9; }
+.inv-item.horizontal { border-color: #2ecc71; color: #27ae60; background: rgba(46, 204, 113, 0.1); }
+.inv-item.vertical { border-color: #e91e63; color: #c2185b; background: rgba(233, 30, 99, 0.1); }
+.inv-item.bomb { border-color: #e67e22; color: #d35400; background: rgba(230, 126, 34, 0.1); }
+.inv-item.cross { border-color: #f1c40f; color: #f39c12; background: rgba(241, 196, 15, 0.1); }
+
+/* Canvas Area */
+.canvas-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--canvas-bg);
+    border: 1px solid var(--canvas-border);
+    box-shadow: var(--canvas-shadow);
+    aspect-ratio: 400 / 400;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Overlays (Game Over, Gacha) */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.88);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    animation: fadeIn 0.25s ease-out;
+}
+
+/* Gacha overlays appear on top of shop overlay */
+#gacha-overlay,
+#gacha-10-overlay {
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.overlay-content {
+    background: #ffffff;
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-radius: 16px;
+    padding: 24px;
+    width: 90%;
+    max-width: 360px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    transform: scale(0.9);
+    animation: scaleUp 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+}
+
+/* Settings Modal Styles */
+.settings-modal-content {
+    position: relative;
+    padding: 20px 16px 24px 16px;
+    width: 92%;
+    max-width: 370px;
+    background: #ffffff;
+    gap: 16px;
+}
+
+.settings-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.settings-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+.setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.setting-item.horizontal {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.setting-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.setting-label {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-color);
+}
+
+.setting-value-text {
+    font-family: var(--font-digital);
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--accent-color);
+}
+
+.volume-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.volume-icon {
+    font-size: 14px;
+}
+
+.volume-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: #cbd5e1;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #0284c7;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(2, 132, 199, 0.4);
+    transition: transform 0.1s;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+}
+
+.btn-toggle-mute {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 12px;
+    background: #ffffff;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-toggle-mute.muted {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
+.btn-toggle-mute.active {
+    background: #e0f2fe;
+    border-color: #38bdf8;
+    color: #0284c7;
+}
+
+/* Shop Modal Styles */
+.shop-modal-content {
+    position: relative;
+    padding: 20px 16px 24px 16px;
+    width: 92%;
+    max-width: 370px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    gap: 12px;
+}
+
+.btn-close-modal {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.btn-close-modal:hover {
+    color: #e74c3c;
+}
+
+.shop-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.shop-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+}
+
+.shop-section-title {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-muted);
+    margin: 0;
+    padding-left: 2px;
+}
+
+.shop-items-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.shop-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.shop-card.highlight {
+    background: linear-gradient(135deg, #fffcf5 0%, #fff7e6 100%);
+    border-color: #f39c12;
+}
+
+.shop-card-badge {
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    font-family: var(--font-display);
+    font-size: 9px;
+    font-weight: 800;
+    background: #94a3b8;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+.shop-card-badge.special {
+    background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
+}
+
+.shop-card-icon {
+    font-size: 24px;
+    background: #ffffff;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    flex-shrink: 0;
+}
+
+.shop-card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.shop-card-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-color);
+}
+
+.shop-card-desc {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.btn-action-shop, .btn-action-shop-10 {
+    font-family: var(--font-digital);
+    font-size: 13px;
+    font-weight: 800;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    color: #ffffff;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.btn-action-shop {
+    background: #f39c12;
+    box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);
+}
+
+.btn-action-shop-10 {
+    background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+    box-shadow: 0 2px 6px rgba(230, 126, 34, 0.3);
+}
+
+.btn-action-shop:hover:not(:disabled), .btn-action-shop-10:hover:not(:disabled) {
+    transform: scale(1.04);
+}
+
+.btn-action-shop:disabled, .btn-action-shop-10:disabled {
+    background: #cbd5e1;
+    color: #94a3b8;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Game Over styling */
+.game-over-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 900;
+    color: #e74c3c;
+    letter-spacing: 0.05em;
+}
+
+.final-stats {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f8fafc;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.final-stat {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.final-stat span:last-child {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-color);
+}
+
+/* Flat Buttons */
+.btn-action {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    color: #ffffff;
+    background: #3498db;
+    box-shadow: 0 2px 6px rgba(52, 152, 219, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.35);
+}
+
+.btn-action:active {
+    transform: translateY(0);
+}
+
+.btn-action.pulse {
+    animation: buttonPulse 2s infinite;
+}
+
+/* Gacha Presentation styling */
+.gacha-content {
+    gap: 15px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.gacha-subtitle {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-muted);
+}
+
+/* 3D Gacha Card Flip (White styling) */
+.gacha-card {
+    width: 170px;
+    height: 240px;
+    perspective: 1000px;
+    margin: 10px 0;
+}
+
+.gacha-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.gacha-card.flipped .gacha-card-inner {
+    transform: rotateY(180deg);
+}
+
+.gacha-card-front, .gacha-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
+
+.gacha-card-front {
+    background: linear-gradient(135deg, #7f8c8d 0%, #bdc3c7 100%);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card-logo {
+    font-family: var(--font-display);
+    font-size: 70px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.4);
+    animation: logoFloat 2s infinite ease-in-out;
+}
+
+.gacha-card-back {
+    background: #ffffff;
+    transform: rotateY(180deg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 10x Draw Layout */
+.gacha-10-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 8px;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.gacha-10-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.ball-visual-mini {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.ball-name-mini {
+    font-family: var(--font-display);
+    font-size: 8px;
+    font-weight: 800;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.ball-visual-mini.v-basic {
+    background: radial-gradient(circle at 10px 10px, #ffffff 0%, #dddddd 60%, #a3a3a3 100%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1), inset 0 -1px 2px rgba(0,0,0,0.15);
+}
+
+.ball-visual-mini.v-steel {
+    background: radial-gradient(circle at 10px 10px, #ffffff 0%, #b4c6d6 50%, #5d6d7e 100%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1), inset -0.5px -0.5px 2px rgba(0,0,0,0.3);
+}
+
+.ball-visual-mini.v-horizontal {
+    background: radial-gradient(circle at 10px 10px, #a8ff78 0%, #2ecc71 100%);
+}
+
+.ball-visual-mini.v-vertical {
+    background: radial-gradient(circle at 10px 10px, #ff85a7 0%, #e91e63 100%);
+}
+
+.ball-visual-mini.v-bomb {
+    background: radial-gradient(circle at 10px 10px, #ffb347 0%, #ff5e62 100%);
+}
+
+.ball-visual-mini.v-cross {
+    background: radial-gradient(circle at 10px 10px, #ffe259 0%, #ffa751 100%);
+}
+
+.ball-visual {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-top: 15px;
+    position: relative;
+}
+
+/* Shading styling for balls */
+.ball-visual.v-basic {
+    background: radial-gradient(circle at 18px 18px, #ffffff 0%, #dddddd 60%, #a3a3a3 100%);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12), inset 0 -2px 4px rgba(0,0,0,0.15);
+}
+
+.ball-visual.v-steel {
+    background: radial-gradient(circle at 18px 18px, #ffffff 0%, #b4c6d6 50%, #5d6d7e 100%);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12), inset -1px -1px 3px rgba(0,0,0,0.3);
+    width: 64px;
+    height: 64px;
+}
+
+.ball-visual.v-horizontal {
+    background: radial-gradient(circle at 18px 18px, #a8ff78 0%, #2ecc71 100%);
+    box-shadow: 0 3px 6px rgba(46, 204, 113, 0.2);
+}
+
+.ball-visual.v-vertical {
+    background: radial-gradient(circle at 18px 18px, #ff85a7 0%, #e91e63 100%);
+    box-shadow: 0 3px 6px rgba(233, 30, 99, 0.2);
+}
+
+.ball-visual.v-bomb {
+    background: radial-gradient(circle at 18px 18px, #ffb347 0%, #ff5e62 100%);
+    box-shadow: 0 3px 6px rgba(255, 94, 98, 0.2);
+}
+
+.ball-visual.v-cross {
+    background: radial-gradient(circle at 18px 18px, #ffe259 0%, #ffa751 100%);
+    box-shadow: 0 3px 6px rgba(255, 167, 81, 0.2);
+}
+
+.ball-name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 900;
+    margin-top: 10px;
+}
+
+.ball-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 0 5px;
+    line-height: 1.4;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ball-rarity {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 5px;
+    background: #f1f5f9;
+}
+
+.ball-rarity.rarity-common { color: var(--rarity-common); border: 1px solid var(--rarity-common); }
+.ball-rarity.rarity-rare { color: var(--rarity-rare); border: 1px solid var(--rarity-rare); }
+.ball-rarity.rarity-epic { color: var(--rarity-epic); border: 1px solid var(--rarity-epic); }
+.ball-rarity.rarity-legendary { color: var(--rarity-legendary); border: 1px solid var(--rarity-legendary); }
+
+/* Control Buttons Bar (Footer) */
+.game-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.btn-control {
+    flex: 1;
+    height: 48px;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--panel-shadow);
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    transition: background var(--transition-speed), transform 0.2s;
+}
+
+.btn-control svg {
+    fill: currentColor;
+}
+
+.btn-control:hover {
+    background: #f8fafc;
+    transform: translateY(-1px);
+}
+
+.btn-control:active {
+    transform: translateY(0);
+}
+
+.btn-control.highlight-text {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 14px;
+}
+
+/* Animations */
+@keyframes coinSpin {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes buttonPulse {
+    0% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(243, 156, 18, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0); }
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.03); }
+}
+
+/* Scrollbar tweaks */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.02);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.1);
+    border-radius: 3px;
+}
+
+/* Buff Tracker UI */
+.buff-tracker {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 15px);
+    width: 280px; /* Increased width */
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px; /* Smoother border */
+    padding: 16px; /* More padding */
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    z-index: 50;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.dark-theme .buff-tracker {
+    background: rgba(30,30,40,0.85);
+    backdrop-filter: blur(4px);
+}
+
+.buff-title {
+    font-family: var(--font-display);
+    font-size: 16px; /* Larger title */
+    font-weight: 900;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-align: center;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 8px;
+}
+
+.buff-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.buff-item {
+    font-size: 13px; /* Larger, more readable text */
+    font-weight: 700;
+    color: var(--text-main);
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.dark-theme .buff-item {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.buff-item.highlight {
+    background: rgba(0, 215, 255, 0.15);
+    border-left: 2px solid #00d7ff;
+}
+
+/* Dev Panel */
+.dev-panel {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 2px dashed #ff0055;
+}
+
+.dev-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 900;
+    color: #ff0055;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.dev-info {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.dev-spent {
+    font-size: 12px;
+    font-weight: 800;
+    color: #f1c40f;
+    margin-top: 6px;
+}

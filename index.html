@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>스와이프 벽돌깨기 - Ball Gacha Edition</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;600;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <div class="game-container">
+        <!-- Game Header (Glassmorphic) -->
+        <header class="game-header">
+            <div class="header-main">
+                <div class="stat-box">
+                    <span class="stat-label">SCORE</span>
+                    <span id="score-val" class="stat-value digital">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">BEST</span>
+                    <span id="best-val" class="stat-value digital highlight-gold">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">WAVE</span>
+                    <span id="wave-val" class="stat-value digital highlight-green">1</span>
+                </div>
+            </div>
+            
+            <div class="header-sub">
+                <!-- Coin Display -->
+                <div class="coin-display">
+                    <svg class="coin-icon" viewBox="0 0 24 24" width="22" height="22">
+                        <circle cx="12" cy="12" r="10" fill="var(--coin-color)" stroke="var(--coin-stroke)" stroke-width="2" />
+                        <text x="12" y="17" font-size="14" font-weight="900" text-anchor="middle" fill="var(--coin-text)">₩</text>
+                    </svg>
+                    <span id="coin-val" class="coin-value digital">0</span>
+                </div>
+                
+                <!-- Header Action Buttons (Shop & Settings) -->
+                <div class="shop-buttons">
+                    <button id="btn-open-shop" class="btn-shop-main">
+                        <span class="btn-shop-icon">🛒</span>
+                        <span class="btn-shop-text">상점</span>
+                    </button>
+                    <button id="btn-open-settings" class="btn-settings-main">
+                        <span class="btn-settings-icon">⚙️</span>
+                        <span class="btn-settings-text">설정</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Ball Inventory Display -->
+        <div class="inventory-bar">
+            <div class="inventory-title">보유 공 (<span id="total-balls-count">1</span>):</div>
+            <div id="inventory-list" class="inventory-list">
+                <!-- Javascript will populate this -->
+                <div class="inv-item basic" title="기본 공 (30%)">⚪ 1</div>
+            </div>
+        </div>
+
+        <!-- Canvas Wrapper -->
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
+            
+            <!-- Settings Modal Overlay -->
+            <div id="settings-overlay" class="overlay hidden">
+                <div class="overlay-content settings-modal-content">
+                    <button id="btn-close-settings" class="btn-close-modal">&times;</button>
+                    <h2 class="settings-title">⚙️ 게임 설정</h2>
+                    
+                    <div class="settings-section">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">음량 (Volume)</span>
+                                <span id="volume-value-text" class="setting-value-text">50%</span>
+                            </div>
+                            <div class="volume-slider-container">
+                                <span class="volume-icon">🔈</span>
+                                <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="50">
+                                <span class="volume-icon">🔊</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item horizontal">
+                            <span class="setting-label">음소거 (Mute)</span>
+                            <button id="btn-toggle-mute-settings" class="btn-toggle-mute">
+                                <span id="mute-status-text">소리 켬</span>
+                            </button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">화면 진동 (Shake)</span>
+                                <span id="shake-value-text" class="setting-value-text">100%</span>
+                            </div>
+                            <div class="volume-slider-container">
+                                <span class="volume-icon">🟰</span>
+                                <input type="range" id="shake-slider" class="volume-slider" min="0" max="100" value="100">
+                                <span class="volume-icon">📳</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item horizontal">
+                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                <span class="setting-label">공 획득 시 아무 곳이나 클릭해 닫기</span>
+                                <span style="font-size: 11px; color: #94a3b8;">켜면 대기열 추가 버튼 외 아무 곳을 클릭해도 닫힙니다</span>
+                            </div>
+                            <button id="btn-toggle-quick-gacha" class="btn-toggle-mute">
+                                <span id="quick-gacha-status-text">OFF</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shop Modal Overlay -->
+            <div id="shop-overlay" class="overlay hidden">
+                <div class="overlay-content shop-modal-content">
+                    <button id="btn-close-shop" class="btn-close-modal">&times;</button>
+                    <h2 class="shop-title">🛒 상점</h2>
+                    
+                    <div class="shop-section">
+                        <h3 class="shop-section-title">공 뽑기</h3>
+                        <div class="shop-items-grid">
+                            <div class="shop-card">
+                                <div class="shop-card-badge">1회</div>
+                                <div class="shop-card-icon">🔮</div>
+                                <div class="shop-card-info">
+                                    <div class="shop-card-name">단판 뽑기</div>
+                                    <div class="shop-card-desc">공 1개를 무작위로 획득합니다</div>
+                                </div>
+                                <button id="btn-draw" class="btn-action-shop" disabled>
+                                    <span>30 ₩</span>
+                                </button>
+                            </div>
+                            <div class="shop-card highlight">
+                                <div class="shop-card-badge special">10회연속</div>
+                                <div class="shop-card-icon">✨</div>
+                                <div class="shop-card-info">
+                                    <div class="shop-card-name">10연속 뽑기</div>
+                                    <div class="shop-card-desc">공 10개를 연속으로 획득합니다</div>
+                                </div>
+                                <button id="btn-draw-10" class="btn-action-shop-10" disabled>
+                                    <span>300 ₩</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shop-section">
+                        <h3 class="shop-section-title">능력치 강화</h3>
+                        <div class="shop-items-grid">
+                            <div class="shop-card upgrade-card">
+                                <div id="upgrade-coin-badge" class="shop-card-badge special">Lv.0</div>
+                                <div class="shop-card-icon">💰</div>
+                                <div class="shop-card-info">
+                                    <div class="shop-card-name">벽돌 파괴 돈 증가</div>
+                                    <div id="upgrade-coin-desc" class="shop-card-desc">벽돌 파괴 시 추가 돈 +0</div>
+                                </div>
+                                <button id="btn-upgrade-coin" class="btn-action-shop" disabled>
+                                    <span id="upgrade-coin-btn-text">200 ₩</span>
+                                </button>
+                            </div>
+                            <div class="shop-card upgrade-card">
+                                <div id="upgrade-star-badge" class="shop-card-badge special">Lv.0</div>
+                                <div class="shop-card-icon">⭐</div>
+                                <div class="shop-card-info">
+                                    <div class="shop-card-name">별 벽돌 등장 확률 증가</div>
+                                    <div id="upgrade-star-desc" class="shop-card-desc">별 벽돌 등장 확률 20%</div>
+                                </div>
+                                <button id="btn-upgrade-star" class="btn-action-shop" disabled>
+                                    <span id="upgrade-star-btn-text">500 ₩</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Game Over Overlay -->
+            <div id="game-over-overlay" class="overlay hidden">
+                <div class="overlay-content">
+                    <h2 class="game-over-title">GAME OVER</h2>
+                    <div class="final-stats">
+                        <div class="final-stat">
+                            <span>최종 점수</span>
+                            <span id="final-score" class="digital">0</span>
+                        </div>
+                        <div class="final-stat">
+                            <span>도달 웨이브</span>
+                            <span id="final-wave" class="digital">1</span>
+                        </div>
+                    </div>
+                    <button id="btn-restart-overlay" class="btn-action pulse">다시 시작</button>
+                </div>
+            </div>
+
+            <!-- Gacha Reveal Overlay -->
+            <div id="gacha-overlay" class="overlay hidden">
+                <div class="overlay-content gacha-content">
+                    <div class="gacha-sparkles"></div>
+                    <h3 class="gacha-subtitle">새로운 공 획득!</h3>
+                    <div id="gacha-card" class="gacha-card">
+                        <div class="gacha-card-inner">
+                            <div class="gacha-card-front">
+                                <div class="card-logo">?</div>
+                            </div>
+                            <div class="gacha-card-back">
+                                <div id="gacha-ball-visual" class="ball-visual"></div>
+                                <h2 id="gacha-ball-name" class="ball-name">강철 공</h2>
+                                <p id="gacha-ball-desc" class="ball-desc">데미지 3. 단단하고 강한 타격감.</p>
+                                <span id="gacha-ball-rarity" class="ball-rarity rarity-epic">EPIC</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="btn-gacha-ok" class="btn-action">대기열에 추가</button>
+                </div>
+            </div>
+
+            <!-- Gacha 10x Reveal Overlay -->
+            <div id="gacha-10-overlay" class="overlay hidden">
+                <div class="overlay-content gacha-10-content">
+                    <h3 class="gacha-subtitle">10회 뽑기 결과!</h3>
+                    <div id="gacha-10-grid" class="gacha-10-grid">
+                        <!-- Javascript will populate 10 items -->
+                    </div>
+                    <button id="btn-gacha-10-ok" class="btn-action">대기열에 추가</button>
+                </div>
+            </div>
+
+            <!-- Wave 80 Conversion Overlay -->
+            <div id="wave-80-overlay" class="overlay hidden">
+                <div class="overlay-content">
+                    <h2 class="game-over-title highlight-gold">WAVE 80 클리어!</h2>
+                    <p class="ball-desc" style="margin-bottom: 20px;">일반 공을 전부 강철 공으로 업그레이드 하시겠습니까?</p>
+                    <div class="shop-buttons" style="justify-content: center; gap: 15px;">
+                        <button id="btn-wave-80-yes" class="btn-action pulse">예 (업그레이드)</button>
+                        <button id="btn-wave-80-no" class="btn-action" style="background: #555;">아니오</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Game Controls Footer -->
+        <footer class="game-controls">
+            <button id="btn-sound" class="btn-control" title="음소거 토글">
+                <!-- Sound On Icon -->
+                <svg id="icon-sound-on" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+                <!-- Sound Off Icon (Hidden by default) -->
+                <svg id="icon-sound-off" viewBox="0 0 24 24" width="24" height="24" class="hidden">
+                    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                </svg>
+            </button>
+
+            <button id="btn-speed" class="btn-control highlight-text" title="배속 조절">
+                <span id="speed-text">1x</span>
+            </button>
+
+            <button id="btn-pause" class="btn-control" title="일시정지">
+                <!-- Pause Icon -->
+                <svg id="icon-pause" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                </svg>
+                <!-- Play Icon (Hidden) -->
+                <svg id="icon-play" viewBox="0 0 24 24" width="24" height="24" class="hidden">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            </button>
+
+            <!-- Skip Turn Button: force all balls to floor -->
+            <button id="btn-skip" class="btn-control" title="턴 스킵 (공 즉시 복귀)">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M6 18l8.5-6L6 6v12zm2-8.14L11.03 12 8 14.14V9.86zM16 6h2v12h-2z"/>
+                </svg>
+            </button>
+
+            <button id="btn-restart" class="btn-control" title="게임 재시작">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                </svg>
+            </button>
+
+            <!-- DevTool Button -->
+            <button id="btn-dev" class="btn-control" title="개발자 툴 토글">
+                🛠️
+            </button>
+        </footer>
+
+        <!-- Buff Tracker & Dev Panel -->
+        <div id="buff-tracker" class="buff-tracker">
+            <div class="buff-title">ACTIVE BUFFS</div>
+            <div id="buff-list" class="buff-list">
+                <!-- Javascript will populate this -->
+            </div>
+            
+            <div id="dev-panel" class="dev-panel hidden">
+                <div class="dev-title">🛠️ DEV MODE ON</div>
+                <div class="dev-info">벽돌 클릭: 즉시 파괴</div>
+                <div class="dev-info">코인 지출: 무제한</div>
+                <div class="dev-spent">개발자 소모 코인: <span id="dev-spent-val">0</span> ₩</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
